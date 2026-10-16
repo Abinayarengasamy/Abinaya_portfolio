@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Abinaya Rengasamy | Front-End & Web Developer Portfolio</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Syne:wght@500;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-dark: #050b14;
+            --bg-card: rgba(10, 22, 40, 0.7);
+            --bio-teal: #00ffd5;
+            --bio-blue: #00a2ff;
+            --bio-violet: #7b2cbf;
+            --bio-pink: #ff007f;
+            --glow-primary: rgba(0, 255, 213, 0.35);
+            --text-primary: #f0f8ff;
+            --text-secondary: #94a3b8;
+            --border-glow: rgba(0, 255, 213, 0.25);
+            --radius-main: 20px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            cursor: none !important;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-primary);
+            font-family: 'Outfit', sans-serif;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Ambient Animated Canvas */
+        #particle-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* Custom Cursor Elements */
+        .cursor-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--bio-teal);
+            border-radius: 50%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: 10000;
+            box-shadow: 0 0 15px var(--bio-teal), 0 0 30px var(--bio-teal);
+            transform: translate(-50%, -50%);
+            transition: width 0.2s, height 0.2s, background-color 0.3s;
+        }
+
+        .cursor-ring {
+            width: 42px;
+            height: 42px;
+            border: 1.5px dashed var(--bio-teal);
+            border-radius: 50%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+            transition: width 0.25s ease-out, height 0.25s ease-out, border-color 0.3s, background-color 0.3s, transform 0.1s ease-out;
+            animation: ringSpin 12s linear infinite;
+            box-shadow: 0 0 15px rgba(0, 255, 213, 0.2);
+        }
+
+        @keyframes ringSpin {
+            0% { transform: translate(-50%, -50%) rotate(0deg); }
+            100% { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+
+        /* Navigation Bar */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            background: rgba(5, 11, 20, 0.85);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid rgba(0, 255, 213, 0.15);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.2rem 6%;
+        }
+
+        .logo {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.4rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            background: linear-gradient(135deg, var(--bio-teal), var(--bio-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-decoration: none;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        nav a {
+            color: var(--text-primary);
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: color 0.3s ease, text-shadow 0.3s ease;
+        }
+
+        nav a:hover {
+            color: var(--bio-teal);
+            text-shadow: 0 0 10px var(--bio-teal);
+        }
+
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        section {
+            padding: 110px 0 70px 0;
+            border-bottom: 1px solid rgba(0, 255, 213, 0.08);
+        }
+
+        /* Hero Section */
+        #home {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 4rem;
+            padding-top: 140px;
+        }
+
+        .hero-content {
+            flex: 1;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            padding: 0.4rem 1.2rem;
+            background: rgba(0, 255, 213, 0.1);
+            border: 1px solid var(--bio-teal);
+            color: var(--bio-teal);
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 1.2rem;
+            letter-spacing: 0.5px;
+        }
+
+        .hero-content h1 {
+            font-family: 'Syne', sans-serif;
+            font-size: 3.8rem;
+            font-weight: 800;
+            line-height: 1.15;
+            margin-bottom: 1.2rem;
+            background: linear-gradient(135deg, #ffffff 40%, var(--bio-teal) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-content p {
+            font-size: 1.15rem;
+            color: var(--text-secondary);
+            margin-bottom: 2.2rem;
+            line-height: 1.7;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 1.2rem;
+        }
+
+        .btn {
+            padding: 0.85rem 2.2rem;
+            border-radius: 40px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            font-size: 0.95rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--bio-teal), var(--bio-blue));
+            color: #030811;
+            box-shadow: 0 0 20px var(--glow-primary);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 0 35px var(--bio-teal);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--border-glow);
+            color: var(--text-primary);
+        }
+
+        .btn-outline:hover {
+            border-color: var(--bio-teal);
+            color: var(--bio-teal);
+            box-shadow: 0 0 20px var(--glow-primary);
+        }
+
+        /* Profile Picture Frame (Perfect Circle with Head Alignment) */
+        .hero-img-wrapper {
+            flex: 0 0 340px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .profile-frame {
+            width: 310px;
+            height: 310px;
+            border-radius: 50%;
+            padding: 6px;
+            background: linear-gradient(135deg, var(--bio-teal), var(--bio-violet));
+            box-shadow: 0 0 35px var(--glow-primary);
+            animation: floatCircle 6s ease-in-out infinite;
+            overflow: hidden;
+        }
+
+        .profile-frame img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: top center;
+            border-radius: 50%;
+            margin-top: 0;
+        }
+
+        @keyframes floatCircle {
+            0%, 100% {
+                transform: translateY(0);
+                box-shadow: 0 0 35px var(--glow-primary);
+            }
+            50% {
+                transform: translateY(-14px);
+                box-shadow: 0 10px 45px rgba(0, 255, 213, 0.5);
+            }
+        }
+
+        /* Section Titles */
+        .section-title {
+            font-family: 'Syne', sans-serif;
+            font-size: 2.3rem;
+            font-weight: 700;
+            margin-bottom: 3rem;
+            text-align: center;
+            color: var(--text-primary);
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 70px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--bio-teal), var(--bio-blue));
+            margin: 0.6rem auto 0 auto;
+            border-radius: 2px;
+            box-shadow: 0 0 12px var(--bio-teal);
+        }
+
+        /* Glassmorphism Cards */
+        .glass-card {
+            background: var(--bg-card);
+            backdrop-filter: blur(16px);
+            border: 1px solid var(--border-glow);
+            border-radius: var(--radius-main);
+            padding: 2.5rem;
+            transition: all 0.35s ease;
+        }
+
+        .glass-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--bio-teal);
+            box-shadow: 0 10px 40px rgba(0, 255, 213, 0.2);
+        }
+
+        /* Skills Grid */
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 2rem;
+        }
+
+        .skill-item {
+            text-align: center;
+        }
+
+        .skill-item i {
+            font-size: 2.6rem;
+            color: var(--bio-teal);
+            margin-bottom: 1rem;
+            filter: drop-shadow(0 0 10px var(--bio-teal));
+        }
+
+        .skill-item h3 {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Projects Grid */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+        }
+
+        .project-card h3 {
+            font-family: 'Syne', sans-serif;
+            color: var(--bio-teal);
+            font-size: 1.45rem;
+            margin-bottom: 1rem;
+        }
+
+        .project-card p {
+            color: var(--text-secondary);
+            font-size: 0.98rem;
+            line-height: 1.65;
+            margin-bottom: 1.5rem;
+        }
+
+        .project-links {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .project-links a {
+            padding: 0.5rem 1.2rem;
+            background: rgba(0, 255, 213, 0.1);
+            border: 1px solid var(--bio-teal);
+            color: var(--bio-teal);
+            border-radius: 20px;
+            font-size: 0.85rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .project-links a:hover {
+            background: var(--bio-teal);
+            color: #030811;
+            box-shadow: 0 0 15px var(--bio-teal);
+        }
+
+        /* Timelines & Cards */
+        .timeline-grid, .cert-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .timeline-card h3, .cert-card h3 {
+            color: var(--bio-teal);
+            font-size: 1.3rem;
+            margin-bottom: 0.4rem;
+        }
+
+        .timeline-card .institution, .cert-card .issuer {
+            font-size: 1.05rem;
+            font-weight: 600;
+            margin-bottom: 0.3rem;
+        }
+
+        .timeline-card .year, .cert-card .cert-date {
+            font-size: 0.88rem;
+            color: var(--bio-blue);
+            margin-bottom: 1rem;
+        }
+
+        .timeline-card p, .cert-card p {
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* Contact Section */
+        .contact-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+        }
+
+        .contact-info p {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            color: var(--text-secondary);
+        }
+
+        .contact-info i {
+            color: var(--bio-teal);
+            font-size: 1.2rem;
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .social-icons a {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: rgba(0, 255, 213, 0.1);
+            border: 1px solid var(--bio-teal);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--bio-teal);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .social-icons a:hover {
+            background: var(--bio-teal);
+            color: #030811;
+            box-shadow: 0 0 20px var(--bio-teal);
+        }
+
+        .contact-form input, .contact-form textarea {
+            width: 100%;
+            background: rgba(5, 11, 20, 0.8);
+            border: 1px solid rgba(0, 255, 213, 0.25);
+            border-radius: 12px;
+            padding: 1rem;
+            color: var(--text-primary);
+            margin-bottom: 1.2rem;
+            font-family: inherit;
+        }
+
+        .contact-form input:focus, .contact-form textarea:focus {
+            outline: none;
+            border-color: var(--bio-teal);
+            box-shadow: 0 0 12px rgba(0, 255, 213, 0.3);
+        }
+
+        footer {
+            text-align: center;
+            padding: 2.5rem 0;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            border-top: 1px solid rgba(0, 255, 213, 0.1);
+        }
+
+        @media (max-width: 900px) {
+            #home {
+                flex-direction: column-reverse;
+                text-align: center;
+                padding-top: 120px;
+            }
+            .btn-group {
+                justify-content: center;
+            }
+            .contact-container {
+                grid-template-columns: 1fr;
+            }
+            nav ul {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Bioluminescent Particles Canvas -->
+    <canvas id="particle-canvas"></canvas>
+
+    <!-- Custom Bioluminescent Cursor -->
+    <div class="cursor-dot" id="cursor-dot"></div>
+    <div class="cursor-ring" id="cursor-ring"></div>
+
+    <!-- Navigation Header -->
+    <header>
+        <a href="#home" class="logo">Abinaya Rengasamy</a>
+        <nav>
+            <ul>
+                <li><a href="#about">About</a></li>
+                <li><a href="#skills">Skills</a></li>
+                <li><a href="#projects">Projects</a></li>
+                <li><a href="#internship">Internship</a></li>
+                <li><a href="#education">Education</a></li>
+                <li><a href="#certifications">Certifications</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="container">
+
+        <!-- Hero Section -->
+        <section id="home">
+            <div class="hero-content">
+                <span class="hero-badge"><i class="fas fa-code"></i> Front-End Developer</span>
+                <h1>Abinaya Rengasamy</h1>
+                <p>Motivated Computer Science graduate skilled in HTML5, CSS3, and JavaScript, seeking a full-time role in Frontend Development. Experienced in building responsive web applications and user-friendly websites with clean code.</p>
+                <div class="btn-group">
+                    <a href="#projects" class="btn btn-primary"><i class="fas fa-rocket"></i> View Projects</a>
+                    <a href="#contact" class="btn btn-outline"><i class="fas fa-paper-plane"></i> Get In Touch</a>
+                </div>
+            </div>
+            <div class="hero-img-wrapper">
+                <div class="profile-frame">
+                    <img src="abinaya_professional_passport.jpg" alt="Abinaya Rengasamy" onerror="this.src='abinaya_professional_passport.jpeg';">
+                </div>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section id="about">
+            <h2 class="section-title">Professional Summary</h2>
+            <div class="glass-card">
+                <p style="font-size: 1.15rem; line-height: 1.8; color: var(--text-primary);">
+                    Motivated Computer Science graduate skilled in HTML5, CSS3, and JavaScript, seeking a full-time role in Frontend Development. Experienced in building responsive web applications and user-friendly websites with clean code and scalable solutions. Passionate about problem-solving and creating intuitive, user-focused designs for real-world projects.
+                </p>
+            </div>
+        </section>
+
+        <!-- Technical & Soft Skills Section -->
+        <section id="skills">
+            <h2 class="section-title">Technical & Core Skills</h2>
+            <div class="skills-grid">
+                <div class="glass-card skill-item">
+                    <i class="fab fa-html5"></i>
+                    <h3>HTML5</h3>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem;">Semantic structure & modern web layouts</p>
+                </div>
+                <div class="glass-card skill-item">
+                    <i class="fab fa-css3-alt"></i>
+                    <h3>CSS3</h3>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem;">Responsive styling, animations & Flexbox/Grid</p>
+                </div>
+                <div class="glass-card skill-item">
+                    <i class="fab fa-js"></i>
+                    <h3>JavaScript</h3>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem;">ES6+, DOM manipulation & interactivity</p>
+                </div>
+                <div class="glass-card skill-item">
+                    <i class="fab fa-bootstrap"></i>
+                    <h3>Bootstrap</h3>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem;">Mobile-first component frameworks</p>
+                </div>
+            </div>
+            <div style="margin-top: 2rem;" class="glass-card">
+                <h3 style="color: var(--bio-teal); margin-bottom: 1rem; font-family: 'Syne', sans-serif;">Tools & Soft Skills</h3>
+                <p style="color: var(--text-secondary); line-height: 1.8;">
+                    <strong>Tools & Platforms:</strong> Git, GitHub<br>
+                    <strong>Core Strengths:</strong> Team Work • Communication • Adaptability • Reliability & Consistency
+                </p>
+            </div>
+        </section>
+
+        <!-- Projects Section -->
+        <section id="projects">
+            <h2 class="section-title">Featured Projects</h2>
+            <div class="projects-grid">
+                <!-- Project 1 -->
+                <div class="glass-card project-card">
+                    <h3>Everyday Elegance</h3>
+                    <p>Designed and developed a stylish e-commerce website showcasing everyday dresses and casual fashion collections. Created structured sections Home, About, Collections, Reviews, and Purchase ensuring seamless multi-page navigation.</p>
+                    <div class="project-links">
+                        <a href="https://abinayarengasamy.github.io/Everyday_Elegance/" target="_blank"><i class="fas fa-external-link-alt"></i> Live Demo</a>
+                        <a href="https://github.com/abinayarengasamy" target="_blank"><i class="fab fa-github"></i> Code</a>
+                    </div>
+                </div>
+                <!-- Project 2 -->
+                <div class="glass-card project-card">
+                    <h3>Little Creme Pot</h3>
+                    <p>Achieved a pink-themed visual presentation highlighting handcrafted quality and delightful bakery aesthetic. Created structured multi-page layout featuring core pages Home, Menu, Customization, etc.</p>
+                    <div class="project-links">
+                        <a href="https://abinayarengasamy.github.io/little-creme-pot/" target="_blank"><i class="fas fa-external-link-alt"></i> Live Demo</a>
+                        <a href="https://github.com/abinayarengasamy" target="_blank"><i class="fab fa-github"></i> Code</a>
+                    </div>
+                </div>
+                <!-- Project 3 -->
+                <div class="glass-card project-card">
+                    <h3>Rham Flowers</h3>
+                    <p>Built a fully responsive e-commerce platform for Tamil Nadu flowers—roses, jasmines, lotuses, and marigolds. Designed an immersive UI with hero carousel, featured bouquets, and custom floral showcase.</p>
+                    <div class="project-links">
+                        <a href="https://github.com/abinayarengasamy" target="_blank"><i class="fab fa-github"></i> Repository</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Internship Section -->
+        <section id="internship">
+            <h2 class="section-title">Professional Experience</h2>
+            <div class="timeline-grid">
+                <div class="glass-card timeline-card">
+                    <h3>Frontend Development Intern</h3>
+                    <div class="institution">Aitech Academy (App Innovation Technologies)</div>
+                    <div class="year">Professional Training & Internship</div>
+                    <p>Proficient in HTML5, CSS3, JavaScript (ES6+) and Bootstrap. Developed and deployed multiple live projects using modern frameworks.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Education Section -->
+        <section id="education">
+            <h2 class="section-title">Education</h2>
+            <div class="timeline-grid">
+                <div class="glass-card timeline-card">
+                    <h3>B.E. Computer Science Engineering</h3>
+                    <div class="institution">Dhanalakshmi Srinivasan Engineering College (A)</div>
+                    <div class="year">2022 – 2026</div>
+                    <p>Focused on core computer science fundamentals, web engineering, software design principles, and collaborative project development.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Certifications Section -->
+        <section id="certifications">
+            <h2 class="section-title">Certifications</h2>
+            <div class="cert-grid">
+                <div class="glass-card cert-card">
+                    <h3>Front End Development - HTML</h3>
+                    <div class="issuer">Great Learning Academy</div>
+                    <div class="cert-date">Completed June 23, 2025</div>
+                    <p>Verified credential showcasing mastery in HTML5 markup, semantic structuring, and responsive front-end web layouts.</p>
+                    <a href="https://www.mygreatlearning.com/certificate/EJDUQEUA?referrer_code=GLNWBE0KPJDSG" target="_blank" class="btn btn-outline" style="padding: 0.4rem 1rem; font-size: 0.85rem; margin-top: 1rem;"><i class="fas fa-certificate"></i> View Credential</a>
+                </div>
+                <div class="glass-card cert-card">
+                    <h3>Java Programming</h3>
+                    <div class="issuer">Great Learning Academy</div>
+                    <div class="cert-date">Completed June 20, 2025</div>
+                    <p>Comprehensive training in core Java syntax, Object-Oriented Programming (OOP) concepts, and fundamental data structures.</p>
+                    <a href="https://www.mygreatlearning.com/certificate/PYBQQTPT?referrer_code=GLNWBE0KPJDSG" target="_blank" class="btn btn-outline" style="padding: 0.4rem 1rem; font-size: 0.85rem; margin-top: 1rem;"><i class="fas fa-certificate"></i> View Credential</a>
+                </div>
+                <div class="glass-card cert-card">
+                    <h3>Developer & Technology</h3>
+                    <div class="issuer">Accenture UK (via Forage)</div>
+                    <div class="cert-date">Completed July 1, 2025</div>
+                    <p>Virtual job simulation focusing on software development architecture, technical troubleshooting, and engineering workflows.</p>
+                    <a href="https://www.theforage.com/completion-certificates/ovyvuqqNRQKBjNxbj/3xnZEj9kfpoQKW885_ovyvuqqNRQKBjNxbj_qDJDgKeGFsAe9JPnx_1751366070565_completion_certificate.pdf" target="_blank" class="btn btn-outline" style="padding: 0.4rem 1rem; font-size: 0.85rem; margin-top: 1rem;"><i class="fas fa-certificate"></i> View Credential</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section with Working Form -->
+        <section id="contact">
+            <h2 class="section-title">Get In Touch</h2>
+            <div class="contact-container">
+                <div class="glass-card contact-info">
+                    <h3 style="color: var(--bio-teal); margin-bottom: 1.5rem; font-family: 'Syne', sans-serif;">Let's Connect</h3>
+                    <p><i class="fas fa-envelope"></i> abinayarenga20@gmail.com</p>
+                    <p><i class="fas fa-phone-alt"></i> +91 8524866956</p>
+                    <p><i class="fas fa-map-marker-alt"></i> Tiruchirappalli, Tamil Nadu, India</p>
+                    <div class="social-icons">
+                        <a href="https://github.com/abinayarengasamy" target="_blank"><i class="fab fa-github"></i></a>
+                        <a href="https://linkedin.com" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                <div class="glass-card">
+                    <!-- Functional Web3Forms Contact Form -->
+                    <form class="contact-form" action="https://api.web3forms.com/submit" method="POST">
+                        <input type="hidden" name="access_key" value="YOUR_WEB3FORMS_ACCESS_KEY_HERE">
+                        <input type="hidden" name="subject" value="New Portfolio Contact Form Submission">
+                        
+                        <input type="text" name="name" placeholder="Your Name" required>
+                        <input type="email" name="email" placeholder="Your Email" required>
+                        <textarea name="message" rows="4" placeholder="Your Message" required></textarea>
+                        <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center;">Send Message</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <footer>
+        <p>&copy; 2026 Abinaya Rengasamy. All Rights Reserved.</p>
+    </footer>
+
+    <!-- Interactive Scripts: Particle Engine & Custom Cursor Physics -->
+    <script>
+        // Custom Bioluminescent Cursor Physics
+        const cursorDot = document.getElementById('cursor-dot');
+        const cursorRing = document.getElementById('cursor-ring');
+        let mouseX = 0, mouseY = 0;
+        let ringX = 0, ringY = 0;
+
+        window.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+            cursorDot.style.left = `${mouseX}px`;
+            cursorDot.style.top = `${mouseY}px`;
+        });
+
+        function animateCursor() {
+            ringX += (mouseX - ringX) * 0.18;
+            ringY += (mouseY - ringY) * 0.18;
+            cursorRing.style.left = `${ringX}px`;
+            cursorRing.style.top = `${ringY}px`;
+            requestAnimationFrame(animateCursor);
+        }
+        animateCursor();
+
+        // Cursor Effects on Hoverable Items
+        document.querySelectorAll('a, button, .glass-card, input, textarea').forEach(el => {
+            el.addEventListener('mouseenter', () => {
+                cursorRing.style.width = '60px';
+                cursorRing.style.height = '60px';
+                cursorRing.style.borderColor = 'var(--bio-pink)';
+                cursorRing.style.backgroundColor = 'rgba(255, 0, 127, 0.08)';
+                cursorDot.style.backgroundColor = 'var(--bio-pink)';
+                cursorDot.style.width = '12px';
+                cursorDot.style.height = '12px';
+            });
+            el.addEventListener('mouseleave', () => {
+                cursorRing.style.width = '42px';
+                cursorRing.style.height = '42px';
+                cursorRing.style.borderColor = 'var(--bio-teal)';
+                cursorRing.style.backgroundColor = 'transparent';
+                cursorDot.style.backgroundColor = 'var(--bio-teal)';
+                cursorDot.style.width = '8px';
+                cursorDot.style.height = '8px';
+            });
+        });
+
+        // Ambient Particle System Canvas
+        const pCanvas = document.getElementById('particle-canvas');
+        const pCtx = pCanvas.getContext('2d');
+
+        function resizeCanvas() {
+            pCanvas.width = window.innerWidth;
+            pCanvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        const particles = Array.from({ length: 50 }, () => ({
+            x: Math.random() * pCanvas.width,
+            y: Math.random() * pCanvas.height,
+            size: Math.random() * 2 + 0.5,
+            vx: (Math.random() - 0.5) * 0.4,
+            vy: (Math.random() - 0.5) * 0.4,
+            alpha: Math.random() * 0.6 + 0.2
+        }));
+
+        function drawParticles() {
+            pCtx.clearRect(0, 0, pCanvas.width, pCanvas.height);
+
+            particles.forEach(p => {
+                pCtx.beginPath();
+                pCtx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                pCtx.fillStyle = `rgba(0, 255, 213, ${p.alpha})`;
+                pCtx.shadowBlur = 10;
+                pCtx.shadowColor = '#00ffd5';
+                pCtx.fill();
+
+                p.x += p.vx;
+                p.y += p.vy;
+
+                if (p.x < 0 || p.x > pCanvas.width) p.vx *= -1;
+                if (p.y < 0 || p.y > pCanvas.height) p.vy *= -1;
+            });
+
+            requestAnimationFrame(drawParticles);
+        }
+        drawParticles();
+    </script>
+</body>
+</html>
